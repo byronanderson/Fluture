@@ -21,6 +21,8 @@ export interface Nodeback<E, R> {
   (err: E | null, value?: R): void
 }
 
+export type ConcurrentNever = ConcurrentFutureInstance<never, never>;
+
 export type ConcurrentRejected<T> = ConcurrentFutureInstance<T, never>;
 
 export type ConcurrentResolved<T> = ConcurrentFutureInstance<never, T>;
@@ -33,6 +35,8 @@ export interface ConcurrentFutureInstance<L, R> {
   'fantasy-land/map'<RB>(mapper: (value: R) => RB): ConcurrentFutureInstance<L, RB>
   'fantasy-land/alt'(right: ConcurrentFutureInstance<L, R>): ConcurrentFutureInstance<L, R>
 }
+
+export type Never = FutureInstance<never, never>;
 
 export type Rejected<T> = FutureInstance<T, never>;
 
@@ -158,7 +162,7 @@ export function map<RA, RB>(mapper: (value: RA) => RB): <T extends FutureInstanc
 export function mapRej<LA, LB>(mapper: (reason: LA) => LB): <R>(source: FutureInstance<LA, R>) => FutureInstance<LB, R>
 
 /** A Future that never settles. See https://github.com/fluture-js/Fluture#never */
-export var never: Resolved<never>
+export var never: Never
 
 /** Create a Future using a provided Node-style callback. See https://github.com/fluture-js/Fluture#node */
 export function node<L, R>(fn: (done: Nodeback<L, R>) => void): FutureInstance<L, R>
