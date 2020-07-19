@@ -84,10 +84,37 @@ export function and<L, R>(second: Uncertain<L, R>): {
 }
 
 /** Logical or for Futures. See https://github.com/fluture-js/Fluture#alt */
-export function alt<L, R>(left: FutureInstance<L, R>): (right: FutureInstance<L, R>) => FutureInstance<L, R>
+export function alt<L>(second: Rejected<L>): {
+  (first: Never): Never
+  (first: Rejected<any>): Rejected<L>
+  <R>(first: Resolved<R>): Resolved<R>
+  <R>(first: Uncertain<any, R>): Uncertain<L, R>
+}
+
+/** Logical or for Futures. See https://github.com/fluture-js/Fluture#alt */
+export function alt<L, R>(second: Uncertain<L, R>): {
+  <T>(first: Resolved<T>): Resolved<T>
+  (first: Rejected<any>): Uncertain<L, R>
+  (first: Uncertain<any, R>): Uncertain<L, R>
+}
 
 /** Race two ConcurrentFutures. See https://github.com/fluture-js/Fluture#alt */
-export function alt<L, R>(left: ConcurrentFutureInstance<L, R>): (right: ConcurrentFutureInstance<L, R>) => ConcurrentFutureInstance<L, R>
+export function alt(second: ConcurrentNever): <L, R>(first: ConcurrentUncertain<L, R>) => ConcurrentUncertain<L, R>
+
+/** Race two ConcurrentFutures. See https://github.com/fluture-js/Fluture#alt */
+export function alt<L>(second: ConcurrentRejected<L>): {
+  <R>(first: ConcurrentResolved<R>): ConcurrentUncertain<L, R>
+  <R>(first: ConcurrentUncertain<L, R>): ConcurrentUncertain<L, R>
+}
+
+/** Race two ConcurrentFutures. See https://github.com/fluture-js/Fluture#alt */
+export function alt<R>(second: ConcurrentResolved<R>): {
+  <L>(first: ConcurrentRejected<L>): ConcurrentUncertain<L, R>
+  <L>(first: ConcurrentUncertain<L, R>): ConcurrentUncertain<L, R>
+}
+
+/** Race two ConcurrentFutures. See https://github.com/fluture-js/Fluture#alt */
+export function alt<L, R>(second: ConcurrentUncertain<L, R>): (first: ConcurrentUncertain<L, R>) => ConcurrentUncertain<L, R>
 
 /** Apply the function in the right Future to the value in the left Future. See https://github.com/fluture-js/Fluture#ap */
 export function ap<L, RA>(value: FutureInstance<L, RA>): <RB>(apply: FutureInstance<L, (value: RA) => RB>) => FutureInstance<L, RB>
