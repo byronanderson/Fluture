@@ -25,6 +25,8 @@ export type ConcurrentRejected<T> = ConcurrentFutureInstance<T, never>;
 
 export type ConcurrentResolved<T> = ConcurrentFutureInstance<never, T>;
 
+export type ConcurrentUncertain<L, R> = ConcurrentFutureInstance<L, R>;
+
 export interface ConcurrentFutureInstance<L, R> {
   sequential: FutureInstance<L, R>
   'fantasy-land/ap'<A, B>(this: ConcurrentFutureInstance<L, (value: A) => B>, right: ConcurrentFutureInstance<L, A>): ConcurrentFutureInstance<L, B>
@@ -35,6 +37,8 @@ export interface ConcurrentFutureInstance<L, R> {
 export type Rejected<T> = FutureInstance<T, never>;
 
 export type Resolved<T> = FutureInstance<never, T>;
+
+export type Uncertain<L, R> = FutureInstance<L, R>;
 
 export interface FutureInstance<L, R> {
 
