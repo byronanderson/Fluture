@@ -117,10 +117,33 @@ export function alt<R>(second: ConcurrentResolved<R>): {
 export function alt<L, R>(second: ConcurrentUncertain<L, R>): (first: ConcurrentUncertain<L, R>) => ConcurrentUncertain<L, R>
 
 /** Apply the function in the right Future to the value in the left Future. See https://github.com/fluture-js/Fluture#ap */
-export function ap<L, RA>(value: FutureInstance<L, RA>): <RB>(apply: FutureInstance<L, (value: RA) => RB>) => FutureInstance<L, RB>
+export function ap<L>(second: Rejected<L>): {
+  <T>(first: Rejected<T>): Rejected<T>
+  (first: Resolved<(value: any) => any>): Rejected<L>
+  (first: Uncertain<L, (value: any) => any>): Rejected<L>
+}
+
+/** Apply the function in the right Future to the value in the left Future. See https://github.com/fluture-js/Fluture#ap */
+export function ap<L, RA>(second: Uncertain<L, RA>): {
+  <T>(first: Rejected<T>): Rejected<T>
+  <RB>(first: Resolved<(value: RA) => RB>): Uncertain<L, RB>
+  <RB>(first: Uncertain<L, (value: RA) => RB>): Uncertain<L, RB>
+}
 
 /** Apply the function in the right ConcurrentFuture to the value in the left ConcurrentFuture. See https://github.com/fluture-js/Fluture#ap */
-export function ap<L, RA>(value: ConcurrentFutureInstance<L, RA>): <RB>(apply: ConcurrentFutureInstance<L, (value: RA) => RB>) => ConcurrentFutureInstance<L, RB>
+export function ap(value: ConcurrentNever): {
+  <L>(func: ConcurrentRejected<L>): ConcurrentRejected<L>
+  <L>(func: ConcurrentUncertain<L, (value: any) => any>): ConcurrentNever
+}
+
+/** Apply the function in the right ConcurrentFuture to the value in the left ConcurrentFuture. See https://github.com/fluture-js/Fluture#ap */
+export function ap<L>(value: ConcurrentRejected<L>): (func: ConcurrentUncertain<L, (value: any) => any>) => ConcurrentRejected<L>
+
+/** Apply the function in the right ConcurrentFuture to the value in the left ConcurrentFuture. See https://github.com/fluture-js/Fluture#ap */
+export function ap<RA>(value: ConcurrentResolved<RA>): <L, RB>(func: ConcurrentUncertain<L, (value: RA) => RB>) => ConcurrentUncertain<L, RB>
+
+/** Apply the function in the right ConcurrentFuture to the value in the left ConcurrentFuture. See https://github.com/fluture-js/Fluture#ap */
+export function ap<L, RA>(value: ConcurrentUncertain<L, RA>): <RB>(func: ConcurrentUncertain<L, (value: RA) => RB>) => ConcurrentUncertain<L, RB>
 
 /** Apply the function in the right Future to the value in the left Future in parallel. See https://github.com/fluture-js/Fluture#pap */
 export function pap<L, RA>(value: FutureInstance<L, RA>): <RB>(apply: FutureInstance<L, (value: RA) => RB>) => FutureInstance<L, RB>
