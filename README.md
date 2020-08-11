@@ -82,7 +82,7 @@ Fluture is written as modular JavaScript.
 
 ```js
 import {readFile} from 'fs'
-import {node, encase, chain, map, fork} from 'fluture/index.js'
+import {node, encase, chain, map, fork} from 'fluture'
 
 const getPackageName = file => (
   node (done => { readFile (file, 'utf8', done) })
